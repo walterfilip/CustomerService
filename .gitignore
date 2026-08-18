@@ -15,6 +15,7 @@ target/
 
 ### IntelliJ IDEA ###
 src/main/resources/application.properties
+.resources/application.properties
 application.properties
 *.properties
 .idea
