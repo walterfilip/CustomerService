@@ -16,15 +16,13 @@ public class CustomerService {
 
     public Customer createCustomer(CreateCustomerRequest request) {
 
-        Customer customer = new Customer();
+        Customer savedCustomer = new Customer(
+                request.firstName(),
+                request.lastName(),
+                request.email(),
+                request.phoneNumber(),
+                request.password());
 
-        customer.setFirstName(request.firstName());
-        customer.setLastName(request.lastName());
-        customer.setEmail(request.email());
-        customer.setPhoneNumber(request.phoneNumber());
-
-        customer.setPassword(request.password());
-
-        return customerRepository.save(customer);
+        return customerRepository.save(savedCustomer);
     }
 }
