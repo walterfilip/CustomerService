@@ -10,11 +10,9 @@ public class CustomerServiceApplication {
         SpringApplication.run(CustomerServiceApplication.class, args);
     }
 
-
-
 /*    TODO UPPGIFT
 
-Byta namn på CustomerService repot/projektet
+Byta namn på CustomerService repot/projektet. FIXA/STÄNGA BRANCHES I HOTELBOOKING! Det är allldeles för många där just nu.
 
 Bryt ut CustomerService logiken från HotelBooking så långt som möjligt (fylla ut alla endpoints som behövs).
 Bygga om databasen på bokningssidan (ta bort customer tabellen).

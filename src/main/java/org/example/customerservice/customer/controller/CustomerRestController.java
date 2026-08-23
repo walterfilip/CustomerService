@@ -1,6 +1,7 @@
 package org.example.customerservice.customer.controller;
 
 
+import org.example.customerservice.customer.model.LoginRequest;
 import org.example.customerservice.customer.service.CustomerService;
 import jakarta.validation.Valid;
 import org.example.customerservice.customer.model.CreateCustomerRequest;
@@ -34,6 +35,11 @@ public class CustomerRestController {
 
     }
 
-
+    @PostMapping("/login")
+    public Customer login(
+            @RequestBody LoginRequest request
+    ) {
+        return customerService.loginCustomer(request);
+    }
 
 }
