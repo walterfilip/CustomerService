@@ -4,6 +4,7 @@ import org.example.customerservice.customer.model.CreateCustomerRequest;
 import org.example.customerservice.customer.model.Customer;
 import org.example.customerservice.customer.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
 public class CustomerService {
@@ -26,5 +27,11 @@ public class CustomerService {
         customer.setPassword(request.password());
 
         return customerRepository.save(customer);
+    }
+
+    public Customer getCustomerById(Long id) {
+        return customerRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Kunden finns inte"));
+
     }
 }

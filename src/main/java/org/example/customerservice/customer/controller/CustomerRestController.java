@@ -26,4 +26,14 @@ public class CustomerRestController {
         return customerService.createCustomer(request);
     }
 
+    @GetMapping("/{id}")
+    //Kanske ska ha annan responsestatus
+    @ResponseStatus(HttpStatus.OK)
+    public Customer getCustomerById(@PathVariable Long id) {
+        return customerService.getCustomerById(id);
+
+    }
+
+
+
 }
