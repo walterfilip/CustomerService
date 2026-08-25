@@ -55,18 +55,16 @@ public class CustomerService {
     }
 
     public Customer updateProfile(UpdateCustomerRequest request) {
-        Customer updatedCustomer = customerRepository.findByEmail(request.getRequest().email());
-        System.out.println( "förnamn före:" + updatedCustomer.getFirstName());
-        updatedCustomer.setFirstName(request.getRequest().firstName());
-        System.out.println("request förnamn: " + request.getRequest().firstName());
-        System.out.println("updatedcustomersförnamn efter: " + updatedCustomer.getFirstName());
-        updatedCustomer.setLastName(request.getRequest().lastName());
-        updatedCustomer.setPhoneNumber(request.getRequest().phoneNumber());
+        Customer updatedCustomer = customerRepository.findByEmail(request.request().email());
 
-        if (request.isChangePassword()){
-            updatedCustomer.setPassword(Encoder.hashPassword(request.getRequest().password()));
+        updatedCustomer.setFirstName(request.request().firstName());
+        updatedCustomer.setLastName(request.request().lastName());
+        updatedCustomer.setPhoneNumber(request.request().phoneNumber());
+
+        if (request.changePassword()){
+            updatedCustomer.setPassword(Encoder.hashPassword(request.request().password()));
         } else  {
-            updatedCustomer.setPassword(request.getRequest().password());
+            updatedCustomer.setPassword(request.request().password());
         }
         customerRepository.save(updatedCustomer);
         return  updatedCustomer;
