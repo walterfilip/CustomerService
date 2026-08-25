@@ -1,11 +1,9 @@
 package org.example.customerservice.customer.controller;
 
 
-import org.example.customerservice.customer.model.LoginRequest;
+import org.example.customerservice.customer.model.*;
 import org.example.customerservice.customer.service.CustomerService;
 import jakarta.validation.Valid;
-import org.example.customerservice.customer.model.CreateCustomerRequest;
-import org.example.customerservice.customer.model.Customer;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,5 +39,18 @@ public class CustomerRestController {
     ) {
         return customerService.loginCustomer(request);
     }
+
+    @PostMapping("/update")
+    public Customer updateCustomer(@RequestBody @Valid UpdateCustomerRequest request){
+        return customerService.updateProfile(request);
+
+    }
+
+    @PostMapping("/checkpassword")
+    public boolean changePassword(@RequestBody CheckPasswordRequest passwordRequest){
+        return customerService.checkPassword(passwordRequest);
+    }
+
+
 
 }

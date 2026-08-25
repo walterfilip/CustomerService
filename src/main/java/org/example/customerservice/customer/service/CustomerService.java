@@ -1,8 +1,7 @@
 package org.example.customerservice.customer.service;
 
-import org.example.customerservice.customer.model.CreateCustomerRequest;
-import org.example.customerservice.customer.model.Customer;
-import org.example.customerservice.customer.model.LoginRequest;
+import jakarta.validation.Valid;
+import org.example.customerservice.customer.model.*;
 import org.example.customerservice.customer.repository.CustomerRepository;
 import org.example.customerservice.utils.encoder.Encoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +17,8 @@ public class CustomerService {
 
     public Customer createCustomer(CreateCustomerRequest request) {
 
+
+        //just nu går det skapa nytt konto på samma adress.
         Customer customer = new Customer();
 
         customer.setFirstName(request.firstName());
@@ -53,4 +54,32 @@ public class CustomerService {
         return customer;
     }
 
+    public Customer updateProfile(UpdateCustomerRequest request) {
+        Customer updatedCustomer = customerRepository.findByEmail(request.getRequest().email());
+        System.out.println( "förnamn före:" + updatedCustomer.getFirstName());
+        updatedCustomer.setFirstName(request.getRequest().firstName());
+        System.out.println("request förnamn: " + request.getRequest().firstName());
+        System.out.println("updatedcustomersförnamn efter: " + updatedCustomer.getFirstName());
+        updatedCustomer.setLastName(request.getRequest().lastName());
+        updatedCustomer.setPhoneNumber(request.getRequest().phoneNumber());
+
+        if (request.isChangePassword()){
+            updatedCustomer.setPassword(Encoder.hashPassword(request.getRequest().password()));
+        } else  {
+            updatedCustomer.setPassword(request.getRequest().password());
+        }
+        customerRepository.save(updatedCustomer);
+        return  updatedCustomer;
+    }
+    public boolean checkPassword(CheckPasswordRequest passwordRequest) {
+
+        if (passwordRequest.password() == null || passwordRequest.password().isBlank()) {
+            return false;
+        }
+        if (passwordRequest.newPassword() == null || passwordRequest.newPassword().isBlank()) {
+            return false;
+        }
+        Customer customer = customerRepository.findByEmail(passwordRequest.email());
+        return Encoder.checkPassword(passwordRequest.password(), customer.getPassword());
+    }
 }
