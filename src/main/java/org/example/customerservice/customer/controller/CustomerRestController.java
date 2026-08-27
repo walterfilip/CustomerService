@@ -51,6 +51,12 @@ public class CustomerRestController {
         return customerService.checkPassword(passwordRequest);
     }
 
+    @PostMapping("/delete")
+    public String deleteCustomer(@RequestBody Customer customer){
+        customerService.removeUser(customer);
+        return "Deleted";
+    }
+
 
 
 }

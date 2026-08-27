@@ -29,5 +29,8 @@ Tjänsten ska inte krascha! den ska ge ett tydligt felmeddelande
 Kolla på att ta bort Customer objekt/modellen från HotelBooking och istället bara utgå från customer ID utifrån booking tabellen.
 Kolla på hur lösenordet ska hanteras mellan HotelBooking och CustomerService, kan man skapa en separat request för att inte skicka lösen.
 
+FRÅGA OM GITHUB
+DTO
+
 */
 }

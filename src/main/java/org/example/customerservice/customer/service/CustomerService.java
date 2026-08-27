@@ -80,4 +80,8 @@ public class CustomerService {
         Customer customer = customerRepository.findByEmail(passwordRequest.email());
         return Encoder.checkPassword(passwordRequest.password(), customer.getPassword());
     }
+
+    public void removeUser(Customer customer) {
+        customerRepository.delete(customer);
+    }
 }
