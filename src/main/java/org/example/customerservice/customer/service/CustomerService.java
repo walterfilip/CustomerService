@@ -1,5 +1,7 @@
 package org.example.customerservice.customer.service;
 
+import org.example.customerservice.customer.dto.CustomerResponse;
+import org.example.customerservice.customer.dto.UpdateCustomerRequest;
 import org.example.customerservice.customer.model.CreateCustomerRequest;
 import org.example.customerservice.customer.model.Customer;
 import org.example.customerservice.customer.model.LoginRequest;
@@ -16,7 +18,7 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    public Customer createCustomer(CreateCustomerRequest request) {
+    public CustomerResponse createCustomer(CreateCustomerRequest request) {
 
         Customer customer = new Customer();
 
@@ -24,33 +26,57 @@ public class CustomerService {
         customer.setLastName(request.lastName());
         customer.setEmail(request.email());
         customer.setPhoneNumber(request.phoneNumber());
-
         customer.setPassword(Encoder.hashPassword(request.password()));
 
-        return customerRepository.save(customer);
+        Customer savedCustomer = customerRepository.save(customer);
+        return toResponse(savedCustomer);
     }
 
-    public Customer getCustomerById(Long id) {
-        return customerRepository.findById(id)
+    public CustomerResponse getCustomerById(Long id) {
+       Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Kunden finns inte"));
 
+       return toResponse(customer);
     }
 
-    public Customer loginCustomer(LoginRequest request) {
+    public CustomerResponse loginCustomer(LoginRequest request) {
         Customer customer = customerRepository.findByEmail(request.email());
 
         if (customer == null) {
             return null;
         }
 
-        if (!Encoder.checkPassword(
+        boolean correcPassword = Encoder.checkPassword(
                 request.password(),
                 customer.getPassword()
-        )) {
+        );
+
+        if (!correcPassword) {
             return null;
         }
 
-        return customer;
+        return toResponse(customer);
     }
 
+    private CustomerResponse toResponse(Customer customer) {
+        return new CustomerResponse(
+                customer.getId(),
+                customer.getFirstName(),
+                customer.getLastName(),
+                customer.getEmail(),
+                customer.getPhoneNumber()
+        );
+    }
+
+    public CustomerResponse updateCustomer(Long customerId, UpdateCustomerRequest request) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new RuntimeException("Kunden finns inte"));
+        customer.setFirstName(request.firstName());
+        customer.setLastName(request.lastName());
+        customer.setPhoneNumber(request.phoneNumber());
+
+        Customer savedCustomer = customerRepository.save(customer);
+        return toResponse(savedCustomer);
+
+    }
 }
