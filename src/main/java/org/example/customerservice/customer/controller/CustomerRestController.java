@@ -52,7 +52,7 @@ public class CustomerRestController {
 //    }
 
     @PostMapping("/update")
-    public Customer updateCustomer(@RequestBody @Valid UpdateCustomerRequest request){
+    public Customer updateCustomer(@RequestBody @Valid UpdateCustomerRequest2 request){
         return customerService.updateProfile(request);
     }
 //    @PutMapping("/{id}")

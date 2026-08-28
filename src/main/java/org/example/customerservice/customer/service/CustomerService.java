@@ -1,8 +1,7 @@
 package org.example.customerservice.customer.service;
 
-import jakarta.validation.Valid;
 import org.example.customerservice.customer.dto.CustomerResponse;
-import org.example.customerservice.customer.dto.UpdateCustomerRequest;
+import org.example.customerservice.customer.dto.UpdateCustomerRequest2;
 import org.example.customerservice.customer.model.CreateCustomerRequest;
 import org.example.customerservice.customer.model.Customer;
 import org.example.customerservice.customer.model.LoginRequest;
@@ -69,7 +68,7 @@ public class CustomerService {
         );
     }
 
-    public Customer updateProfile(UpdateCustomerRequest request) {
+    public Customer updateProfile(UpdateCustomerRequest2 request) {
         Customer updatedCustomer = customerRepository.findByEmail(request.request().email());
 
         updatedCustomer.setFirstName(request.request().firstName());
