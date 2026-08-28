@@ -1,5 +1,6 @@
 package org.example.customerservice.customer.service;
 
+import jakarta.validation.Valid;
 import org.example.customerservice.customer.dto.CustomerResponse;
 import org.example.customerservice.customer.dto.UpdateCustomerRequest;
 import org.example.customerservice.customer.model.CreateCustomerRequest;
@@ -20,6 +21,8 @@ public class CustomerService {
 
     public CustomerResponse createCustomer(CreateCustomerRequest request) {
 
+
+        //just nu går det skapa nytt konto på samma adress.
         Customer customer = new Customer();
 
         customer.setFirstName(request.firstName());
@@ -46,12 +49,10 @@ public class CustomerService {
             return null;
         }
 
-        boolean correcPassword = Encoder.checkPassword(
+        if (!Encoder.checkPassword(
                 request.password(),
                 customer.getPassword()
-        );
-
-        if (!correcPassword) {
+        )) {
             return null;
         }
 
@@ -68,15 +69,46 @@ public class CustomerService {
         );
     }
 
-    public CustomerResponse updateCustomer(Long customerId, UpdateCustomerRequest request) {
-        Customer customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new RuntimeException("Kunden finns inte"));
-        customer.setFirstName(request.firstName());
-        customer.setLastName(request.lastName());
-        customer.setPhoneNumber(request.phoneNumber());
+    public Customer updateProfile(UpdateCustomerRequest request) {
+        Customer updatedCustomer = customerRepository.findByEmail(request.request().email());
 
-        Customer savedCustomer = customerRepository.save(customer);
-        return toResponse(savedCustomer);
+        updatedCustomer.setFirstName(request.request().firstName());
+        updatedCustomer.setLastName(request.request().lastName());
+        updatedCustomer.setPhoneNumber(request.request().phoneNumber());
 
+        if (request.changePassword()){
+            updatedCustomer.setPassword(Encoder.hashPassword(request.request().password()));
+        } else  {
+            updatedCustomer.setPassword(request.request().password());
+        }
+        customerRepository.save(updatedCustomer);
+        return  updatedCustomer;
     }
+    public boolean checkPassword(CheckPasswordRequest passwordRequest) {
+
+        if (passwordRequest.password() == null || passwordRequest.password().isBlank()) {
+            return false;
+        }
+        if (passwordRequest.newPassword() == null || passwordRequest.newPassword().isBlank()) {
+            return false;
+        }
+        Customer customer = customerRepository.findByEmail(passwordRequest.email());
+        return Encoder.checkPassword(passwordRequest.password(), customer.getPassword());
+    }
+
+    public void removeUser(Customer customer) {
+        customerRepository.delete(customer);
+    }
+
+//    public CustomerResponse updateCustomer(Long customerId, UpdateCustomerRequest request) {
+//        Customer customer = customerRepository.findById(customerId)
+//                .orElseThrow(() -> new RuntimeException("Kunden finns inte"));
+//        customer.setFirstName(request.firstName());
+//        customer.setLastName(request.lastName());
+//        customer.setPhoneNumber(request.phoneNumber());
+//
+//        Customer savedCustomer = customerRepository.save(customer);
+//        return toResponse(savedCustomer);
+//
+//    }
 }
