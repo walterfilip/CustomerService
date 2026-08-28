@@ -5,6 +5,7 @@ import org.example.customerservice.customer.model.*;
 import org.example.customerservice.customer.service.CustomerService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -33,11 +34,17 @@ public class CustomerRestController {
 
     }
 
+//    @PostMapping("/login")
+//    public Customer login(@RequestBody LoginRequest request) {
+//        return customerService.loginCustomer(request);
+//    }
     @PostMapping("/login")
-    public Customer login(
-            @RequestBody LoginRequest request
-    ) {
-        return customerService.loginCustomer(request);
+    public ResponseEntity<Customer> loginCustomer(@RequestBody LoginRequest request) {
+        Customer customer = customerService.loginCustomer(request);
+        if (customer == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok(customer);
     }
 
     @PostMapping("/update")
