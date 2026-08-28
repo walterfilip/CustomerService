@@ -30,7 +30,7 @@ public class CustomerRestController {
     @GetMapping("/{id}")
     //Kanske ska ha annan responsestatus
     @ResponseStatus(HttpStatus.OK)
-    public CustomerResponse getCustomerById(@PathVariable Long id) {
+    public Customer getCustomerById(@PathVariable Long id) {
         return customerService.getCustomerById(id);
 
     }
