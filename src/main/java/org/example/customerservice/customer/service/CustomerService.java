@@ -1,10 +1,7 @@
 package org.example.customerservice.customer.service;
 
-import org.example.customerservice.customer.dto.CustomerResponse;
-import org.example.customerservice.customer.dto.UpdateCustomerRequest2;
-import org.example.customerservice.customer.model.CreateCustomerRequest;
-import org.example.customerservice.customer.model.Customer;
-import org.example.customerservice.customer.model.LoginRequest;
+import org.example.customerservice.customer.model.CustomerResponse;
+import org.example.customerservice.customer.model.*;
 import org.example.customerservice.customer.repository.CustomerRepository;
 import org.example.customerservice.utils.encoder.Encoder;
 import org.springframework.stereotype.Service;
@@ -41,7 +38,7 @@ public class CustomerService {
        return toResponse(customer);
     }
 
-    public CustomerResponse loginCustomer(LoginRequest request) {
+    public Customer loginCustomer(LoginRequest request) {
         Customer customer = customerRepository.findByEmail(request.email());
 
         if (customer == null) {
@@ -55,7 +52,7 @@ public class CustomerService {
             return null;
         }
 
-        return toResponse(customer);
+        return customer;
     }
 
     private CustomerResponse toResponse(Customer customer) {
@@ -68,7 +65,7 @@ public class CustomerService {
         );
     }
 
-    public Customer updateProfile(UpdateCustomerRequest2 request) {
+    public Customer updateProfile(UpdateCustomerRequest request) {
         Customer updatedCustomer = customerRepository.findByEmail(request.request().email());
 
         updatedCustomer.setFirstName(request.request().firstName());
@@ -83,6 +80,17 @@ public class CustomerService {
         customerRepository.save(updatedCustomer);
         return  updatedCustomer;
     }
+    //    public CustomerResponse updateCustomer(Long customerId, UpdateCustomerRequest request) {
+//        Customer customer = customerRepository.findById(customerId)
+//                .orElseThrow(() -> new RuntimeException("Kunden finns inte"));
+//        customer.setFirstName(request.firstName());
+//        customer.setLastName(request.lastName());
+//        customer.setPhoneNumber(request.phoneNumber());
+//
+//        Customer savedCustomer = customerRepository.save(customer);
+//        return toResponse(savedCustomer);
+//
+//    }
     public boolean checkPassword(CheckPasswordRequest passwordRequest) {
 
         if (passwordRequest.password() == null || passwordRequest.password().isBlank()) {
@@ -99,15 +107,5 @@ public class CustomerService {
         customerRepository.delete(customer);
     }
 
-//    public CustomerResponse updateCustomer(Long customerId, UpdateCustomerRequest request) {
-//        Customer customer = customerRepository.findById(customerId)
-//                .orElseThrow(() -> new RuntimeException("Kunden finns inte"));
-//        customer.setFirstName(request.firstName());
-//        customer.setLastName(request.lastName());
-//        customer.setPhoneNumber(request.phoneNumber());
-//
-//        Customer savedCustomer = customerRepository.save(customer);
-//        return toResponse(savedCustomer);
-//
-//    }
+
 }

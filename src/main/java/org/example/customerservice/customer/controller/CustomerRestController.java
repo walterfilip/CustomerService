@@ -8,7 +8,6 @@ import org.example.customerservice.customer.model.CreateCustomerRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.example.customerservice.customer.dto.*;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -52,7 +51,7 @@ public class CustomerRestController {
 //    }
 
     @PostMapping("/update")
-    public Customer updateCustomer(@RequestBody @Valid UpdateCustomerRequest2 request){
+    public Customer updateCustomer(@RequestBody @Valid UpdateCustomerRequest request){
         return customerService.updateProfile(request);
     }
 //    @PutMapping("/{id}")

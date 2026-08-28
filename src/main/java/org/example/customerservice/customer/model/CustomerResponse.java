@@ -1,4 +1,4 @@
-package org.example.customerservice.customer.dto;
+package org.example.customerservice.customer.model;
 
 public record CustomerResponse(
         Long id,
