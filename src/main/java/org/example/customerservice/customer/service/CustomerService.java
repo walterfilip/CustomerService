@@ -31,28 +31,30 @@ public class CustomerService {
         return toResponse(savedCustomer);
     }
 
-    public Customer getCustomerById(Long id) {
-       Customer customer = customerRepository.findById(id)
+    public CustomerResponse getCustomerById(Long id) {
+        Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Kunden finns inte"));
 
-       return customer;
+        return toResponse(customer);
     }
 
-    public Customer loginCustomer(LoginRequest request) {
+    public CustomerResponse loginCustomer(LoginRequest request) {
         Customer customer = customerRepository.findByEmail(request.email());
 
         if (customer == null) {
             return null;
         }
 
-        if (!Encoder.checkPassword(
+        boolean correctPassword = Encoder.checkPassword(
                 request.password(),
                 customer.getPassword()
-        )) {
+        );
+
+        if (!correctPassword) {
             return null;
         }
 
-        return customer;
+        return toResponse(customer);
     }
 
     private CustomerResponse toResponse(Customer customer) {
@@ -65,21 +67,28 @@ public class CustomerService {
         );
     }
 
-    public Customer updateProfile(UpdateCustomerRequest request) {
-        Customer updatedCustomer = customerRepository.findByEmail(request.request().email());
+    public CustomerResponse updateCustomer(
+            Long customerId,
+            UpdateCustomerRequest request
+    ) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new RuntimeException("Kunden finns inte"));
 
-        updatedCustomer.setFirstName(request.request().firstName());
-        updatedCustomer.setLastName(request.request().lastName());
-        updatedCustomer.setPhoneNumber(request.request().phoneNumber());
+        customer.setFirstName(request.firstName());
+        customer.setLastName(request.lastName());
+        customer.setPhoneNumber(request.phoneNumber());
 
-        if (request.changePassword()){
-            updatedCustomer.setPassword(Encoder.hashPassword(request.request().password()));
-        } else  {
-            updatedCustomer.setPassword(request.request().password());
+        if (request.changePassword()) {
+            customer.setPassword(
+                    Encoder.hashPassword(request.newPassword())
+            );
         }
-        customerRepository.save(updatedCustomer);
-        return  updatedCustomer;
+
+        Customer savedCustomer = customerRepository.save(customer);
+
+        return toResponse(savedCustomer);
     }
+
     //    public CustomerResponse updateCustomer(Long customerId, UpdateCustomerRequest request) {
 //        Customer customer = customerRepository.findById(customerId)
 //                .orElseThrow(() -> new RuntimeException("Kunden finns inte"));
@@ -103,7 +112,8 @@ public class CustomerService {
         return Encoder.checkPassword(passwordRequest.password(), customer.getPassword());
     }
 
-    public void removeUser(Customer customer) {
+    public void removeUser(Long customerId) {
+        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new RuntimeException("Kunden finns inte"));
         customerRepository.delete(customer);
     }
 

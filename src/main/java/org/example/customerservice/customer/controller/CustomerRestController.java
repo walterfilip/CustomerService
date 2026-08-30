@@ -28,21 +28,29 @@ public class CustomerRestController {
     }
 
     @GetMapping("/{id}")
-    //Kanske ska ha annan responsestatus
-    @ResponseStatus(HttpStatus.OK)
-    public Customer getCustomerById(@PathVariable Long id) {
+    public CustomerResponse getCustomerById(@PathVariable Long id) {
         return customerService.getCustomerById(id);
-
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Customer> loginCustomer(@RequestBody LoginRequest request) {
-        Customer customer = customerService.loginCustomer(request);
+    public ResponseEntity<CustomerResponse> loginCustomer(
+            @RequestBody @Valid LoginRequest request
+    ) {
+        CustomerResponse customer = customerService.loginCustomer(request);
         if (customer == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return ResponseEntity.ok(customer);
     }
+
+    @PutMapping("/{id}")
+    public CustomerResponse updateCustomer(
+            @PathVariable Long id,
+            @RequestBody @Valid UpdateCustomerRequest request
+    ) {
+        return customerService.updateCustomer(id, request);
+    }
+
 //    @PostMapping("/login")
 //    public CustomerResponse login(
 //            @RequestBody LoginRequest request
@@ -50,18 +58,10 @@ public class CustomerRestController {
 //        return customerService.loginCustomer(request);
 //    }
 
-    @PostMapping("/update")
-    public Customer updateCustomer(@RequestBody @Valid UpdateCustomerRequest request){
-        return customerService.updateProfile(request);
-    }
-//    @PutMapping("/{id}")
-//    public CustomerResponse updateCustomer(
-//            @PathVariable Long id,
-//            @RequestBody @Valid UpdateCustomerRequest request
-//    ){
-//        return customerService.updateCustomer(id, request);
+//    @PostMapping("/update")
+//    public Customer updateCustomer(@RequestBody @Valid UpdateCustomerProfileRequest request){
+//        return customerService.updateProfile(request);
 //    }
-
 
     @PostMapping("/checkpassword")
     public boolean changePassword(@RequestBody CheckPasswordRequest passwordRequest){
@@ -69,8 +69,8 @@ public class CustomerRestController {
     }
 
     @PostMapping("/delete")
-    public String deleteCustomer(@RequestBody Customer customer){
-        customerService.removeUser(customer);
+    public String deleteCustomer(@RequestBody Long id){
+        customerService.removeUser(id);
         return "Deleted";
     }
 
