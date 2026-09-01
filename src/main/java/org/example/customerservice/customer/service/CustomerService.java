@@ -89,17 +89,6 @@ public class CustomerService {
         return toResponse(savedCustomer);
     }
 
-    //    public CustomerResponse updateCustomer(Long customerId, UpdateCustomerRequest request) {
-//        Customer customer = customerRepository.findById(customerId)
-//                .orElseThrow(() -> new RuntimeException("Kunden finns inte"));
-//        customer.setFirstName(request.firstName());
-//        customer.setLastName(request.lastName());
-//        customer.setPhoneNumber(request.phoneNumber());
-//
-//        Customer savedCustomer = customerRepository.save(customer);
-//        return toResponse(savedCustomer);
-//
-//    }
     public boolean checkPassword(CheckPasswordRequest passwordRequest) {
 
         if (passwordRequest.password() == null || passwordRequest.password().isBlank()) {
