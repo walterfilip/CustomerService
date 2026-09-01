@@ -16,11 +16,12 @@ public class CustomerServiceApplication {
 
 
 
-flytta allt från CustomerService På hotelsidan
-----Flytta bort hjälpfuntion från CustomerController i Hotelbooking
+flytta allt från CustomerService På hotelsidan ---------- fixat
+----Flytta bort hjälpfuntion från CustomerController i Hotelbooking ---------fixat!
 
 Kolla på att skriva bättre felmeddelande (t.ex, om kunden inte finns när man bokar. Just nu krashar sidan!).
 --- funkar just nu på login.
+--- fixat i edit, provkör gärna och kolla om ni hittar någon bugg.
 
 Se till att API anropen ska ha rätt status meddelande. (response entities?).
 -- finns just nu i login.
