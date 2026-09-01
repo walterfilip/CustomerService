@@ -51,18 +51,6 @@ public class CustomerRestController {
         return customerService.updateCustomer(id, request);
     }
 
-//    @PostMapping("/login")
-//    public CustomerResponse login(
-//            @RequestBody LoginRequest request
-//    ) {
-//        return customerService.loginCustomer(request);
-//    }
-
-//    @PostMapping("/update")
-//    public Customer updateCustomer(@RequestBody @Valid UpdateCustomerProfileRequest request){
-//        return customerService.updateProfile(request);
-//    }
-
     @PostMapping("/checkpassword")
     public boolean changePassword(@RequestBody CheckPasswordRequest passwordRequest){
         return customerService.checkPassword(passwordRequest);
