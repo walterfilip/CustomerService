@@ -23,12 +23,15 @@ Kolla på att skriva bättre felmeddelande (t.ex, om kunden inte finns när man 
 --- funkar just nu på login.
 --- fixat i edit, provkör gärna och kolla om ni hittar någon bugg.
 
+radera konto ifall man inte har någon aktiv bokning. då krashar den om CS ligger nere.
+ändra uppgifter krashar också
+
 Se till att API anropen ska ha rätt status meddelande. (response entities?).
 -- finns just nu i login.
 
 Steg 8 – Felhantering mellan tjänsterna
-Stäng av kundtjänsten och försök skapa en bokning – vad händer?
-Tjänsten ska inte krascha! den ska ge ett tydligt felmeddelande
+Stäng av kundtjänsten och försök skapa en bokning – vad händer? -- tänker att detta funkar nu
+Tjänsten ska inte krascha! den ska ge ett tydligt felmeddelande -- det gör den nu
 
 Kolla över DTOS (delete det som inte behövs), se till så Customerservice inte returnerar lösenord till Hotellbooking
 
