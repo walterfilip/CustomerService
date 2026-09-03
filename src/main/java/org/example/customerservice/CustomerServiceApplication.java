@@ -40,6 +40,7 @@ Kolla över DTOS (delete det som inte behövs), se till så Customerservice inte
 Fundera på ytterligare microservice tjänst för vg (recensioner t.ex).
 --- eventuellt lägga in en knapp direkt i min sida?
 
+Snygga till utskrifterna
 
 
 
