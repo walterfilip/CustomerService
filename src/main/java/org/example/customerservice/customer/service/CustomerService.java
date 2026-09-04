@@ -5,6 +5,9 @@ import org.example.customerservice.customer.model.*;
 import org.example.customerservice.customer.repository.CustomerRepository;
 import org.example.customerservice.utils.encoder.Encoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
+
+import java.util.List;
 
 @Service
 public class CustomerService {
@@ -18,17 +21,31 @@ public class CustomerService {
     public CustomerResponse createCustomer(CreateCustomerRequest request) {
 
 
+
+        try {
+            List<Customer> list= customerRepository.getCustomerByEmail(request.email());
+            if(list.isEmpty()){
+                Customer customer = new Customer();
+
+                customer.setFirstName(request.firstName());
+                customer.setLastName(request.lastName());
+                customer.setEmail(request.email());
+                customer.setPhoneNumber(request.phoneNumber());
+                customer.setPassword(Encoder.hashPassword(request.password()));
+
+                Customer savedCustomer = customerRepository.save(customer);
+                return toResponse(savedCustomer);
+            }
+        }catch (ResourceAccessException e) {
+            return new CustomerResponse(null, null, null, null, null);
+        }
+
+
+
+
+
         //just nu går det skapa nytt konto på samma adress.
-        Customer customer = new Customer();
-
-        customer.setFirstName(request.firstName());
-        customer.setLastName(request.lastName());
-        customer.setEmail(request.email());
-        customer.setPhoneNumber(request.phoneNumber());
-        customer.setPassword(Encoder.hashPassword(request.password()));
-
-        Customer savedCustomer = customerRepository.save(customer);
-        return toResponse(savedCustomer);
+        return new CustomerResponse(null, null, null, null, null);
     }
 
     public CustomerResponse getCustomerById(Long id) {
